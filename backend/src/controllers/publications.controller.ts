@@ -128,7 +128,7 @@ export const getPublicationsByDateController = async (req: Request, res: Respons
  * GET /api/publications/stats
  * Get publication statistics
  */
-export const getStats = async (req: Request, res: Response): Promise<void> => {
+export const getStats = async (_req: Request, res: Response): Promise<void> => {
   try {
     const stats = await getPublicationStats();
     res.json({ data: stats });

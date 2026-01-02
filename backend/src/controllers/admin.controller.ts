@@ -8,7 +8,7 @@ import { logger } from '../utils/logger';
  * POST /api/admin/fetch-now
  * Trigger immediate RSS fetch for all sources
  */
-export const triggerFetchNow = async (req: Request, res: Response): Promise<void> => {
+export const triggerFetchNow = async (_req: Request, res: Response): Promise<void> => {
   try {
     logger.info('Manual RSS fetch triggered');
 
@@ -78,7 +78,7 @@ export const getFetchLogs = async (req: Request, res: Response): Promise<void> =
  * POST /api/admin/scrape-covers
  * Trigger publication cover scraping for today
  */
-export const scrapeCoverImages = async (req: Request, res: Response): Promise<void> => {
+export const scrapeCoverImages = async (_req: Request, res: Response): Promise<void> => {
   try {
     logger.info('Manual cover scraping triggered');
 

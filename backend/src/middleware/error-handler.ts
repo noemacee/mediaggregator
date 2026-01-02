@@ -4,9 +4,9 @@ import { logger } from '../utils/logger';
 // Error handler middleware
 export const errorHandler = (
   error: Error,
-  req: Request,
+  _req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ): void => {
   logger.error('Error handler caught:', error);
 
