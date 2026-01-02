@@ -1,18 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../components/common/Header';
 import ArticlesList from '../components/articles/ArticlesList';
 import { useArticles } from '../hooks/useArticles';
 import { useMediaSources } from '../hooks/useMediaSources';
+import { getArticleCategories } from '../services/api';
 
 const Articles = () => {
   const [selectedSourceId, setSelectedSourceId] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [articlesLimit, setArticlesLimit] = useState<number>(50);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [categoriesLoading, setCategoriesLoading] = useState<boolean>(true);
 
   const { mediaSources } = useMediaSources();
   const { articles, loading, error, refetch } = useArticles({
     media_source_id: selectedSourceId === 'all' ? undefined : selectedSourceId,
+    category: selectedCategory === 'all' ? undefined : selectedCategory,
     limit: articlesLimit
   });
+
+  // Fetch available categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setCategoriesLoading(true);
+        const cats = await getArticleCategories();
+        setCategories(cats);
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+      } finally {
+        setCategoriesLoading(false);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -21,28 +42,52 @@ const Articles = () => {
       {/* Filters */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            {/* Media source filter */}
-            <div className="flex items-center space-x-3">
-              <label htmlFor="source-filter" className="text-sm font-medium text-gray-700">
-                Source:
-              </label>
-              <select
-                id="source-filter"
-                value={selectedSourceId}
-                onChange={(e) => setSelectedSourceId(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="all">Toutes les sources</option>
-                {mediaSources.map((source) => (
-                  <option key={source.id} value={source.id}>
-                    {source.name} ({source.type === 'newspaper' ? 'Quotidien' : 'Magazine'})
-                  </option>
-                ))}
-              </select>
+          <div className="flex flex-col gap-4">
+            {/* First row: Source and Category filters */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              {/* Media source filter */}
+              <div className="flex items-center space-x-3">
+                <label htmlFor="source-filter" className="text-sm font-medium text-gray-700">
+                  Source:
+                </label>
+                <select
+                  id="source-filter"
+                  value={selectedSourceId}
+                  onChange={(e) => setSelectedSourceId(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="all">Toutes les sources</option>
+                  {mediaSources.map((source) => (
+                    <option key={source.id} value={source.id}>
+                      {source.name} ({source.type === 'newspaper' ? 'Quotidien' : 'Magazine'})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Category filter */}
+              <div className="flex items-center space-x-3">
+                <label htmlFor="category-filter" className="text-sm font-medium text-gray-700">
+                  Catégorie:
+                </label>
+                <select
+                  id="category-filter"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  disabled={categoriesLoading}
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                >
+                  <option value="all">Toutes les catégories</option>
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category.charAt(0).toUpperCase() + category.slice(1)}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
-            {/* Articles count */}
+            {/* Second row: Articles count */}
             <div className="flex items-center space-x-3">
               <label htmlFor="limit-filter" className="text-sm font-medium text-gray-700">
                 Afficher:

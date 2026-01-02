@@ -3,6 +3,12 @@
 export type MediaType = 'newspaper' | 'magazine';
 export type PoliticalLeaning = 'left' | 'center-left' | 'center' | 'center-right' | 'right' | 'neutral';
 
+// Common article categories (simplified)
+export type ArticleCategory =
+  | 'main'     // General news
+  | 'economy'  // Économie
+  | 'sports';  // Sports
+
 export interface MediaSource {
   id: string;
   name: string;
@@ -13,6 +19,7 @@ export interface MediaSource {
   logo_url?: string;
   cover_image_url?: string;
   political_leaning?: PoliticalLeaning;
+  category?: ArticleCategory;
   is_active: boolean;
   fetch_interval_minutes: number;
   last_fetched_at?: string;

@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import kiosqueLogo from '../../assets/kiosque-logo.png';
 
 const Header = () => {
   const location = useLocation();
@@ -9,9 +10,11 @@ const Header = () => {
         <div className="flex items-center justify-between mb-4">
           <div>
             <Link to="/" className="hover:opacity-80 transition-opacity flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">K</span>
-              </div>
+              <img 
+                src={kiosqueLogo} 
+                alt="Le Kiosque" 
+                className="w-12 h-12 object-contain"
+              />
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Le Kiosque</h1>
                 <p className="text-sm text-gray-600 mt-1">

@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import kiosqueLogo from '../../assets/kiosque-logo.png';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -55,14 +56,12 @@ const Sidebar = () => {
     <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 flex flex-col">
       {/* Logo/Header */}
       <div className="p-6 border-b border-gray-200">
-        <Link to="/" className="flex items-center space-x-2">
-          <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">K</span>
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-gray-900">Le Kiosque</h1>
-            <p className="text-xs text-gray-500">Votre kiosque</p>
-          </div>
+        <Link to="/" className="block w-full">
+          <img 
+            src={kiosqueLogo} 
+            alt="Le Kiosque" 
+            className="w-full h-auto object-contain"
+          />
         </Link>
       </div>
 

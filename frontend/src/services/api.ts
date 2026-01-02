@@ -127,6 +127,11 @@ export const getArticleById = async (id: string): Promise<Article> => {
   return data.data;
 };
 
+export const getArticleCategories = async (): Promise<string[]> => {
+  const { data } = await apiClient.get<ApiResponse<string[]>>('/api/articles/categories/list');
+  return data.data;
+};
+
 // =====================================================
 // ADMIN API
 // =====================================================
