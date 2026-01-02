@@ -7,7 +7,7 @@ interface ArticleCardProps {
 }
 
 const ArticleCard = ({ article }: ArticleCardProps) => {
-  const { title, description, image_url, article_url, published_at, author, media_source } = article;
+  const { title, description, image_url, article_url, published_at, media_source } = article;
   const { isSaved, toggleSave } = useSavedArticles();
 
   const handleClick = () => {
