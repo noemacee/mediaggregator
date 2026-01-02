@@ -1,5 +1,6 @@
 import cron from 'node-cron';
 import { fetchAllMediaSources } from './rss-fetcher.service';
+import { updateTodayPublicationCovers } from './cover-scraper.service';
 import { logger } from '../utils/logger';
 
 let scheduledTask: cron.ScheduledTask | null = null;

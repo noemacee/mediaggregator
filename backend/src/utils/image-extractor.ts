@@ -78,14 +78,46 @@ export const extractImageFromHtml = (html: string): string | null => {
 };
 
 /**
+ * Check if an image URL looks like a cover image
+ */
+const isLikelyCoverImage = (url: string): boolean => {
+  const urlLower = url.toLowerCase();
+  const coverKeywords = [
+    'cover', 'couverture', 'une', 'front', 'magazine', 'journal',
+    'edition', 'édition', 'numero', 'numéro', 'issue', 'page-1'
+  ];
+  
+  return coverKeywords.some(keyword => urlLower.includes(keyword));
+};
+
+/**
  * Get the best quality image from a list of articles
  * Used to select publication cover image
+ * Prioritizes images that look like covers (contain keywords like "cover", "une", etc.)
  */
 export const selectBestCoverImage = (imageUrls: string[]): string | null => {
   if (imageUrls.length === 0) return null;
 
-  // TODO: Could add logic to check image dimensions/quality
-  // For now, return the first valid image
+  // First, try to find images that look like covers
+  const coverImages = imageUrls.filter(url => isLikelyCoverImage(url));
+  if (coverImages.length > 0) {
+    return coverImages[0];
+  }
+
+  // If no obvious cover images, prefer larger images (check URL patterns)
+  // Many sites use size indicators in URLs (e.g., _large, _800x600, etc.)
+  const largeImages = imageUrls.filter(url => {
+    const urlLower = url.toLowerCase();
+    return urlLower.includes('large') || 
+           urlLower.includes('big') || 
+           urlLower.match(/\d{3,4}x\d{3,4}/); // Dimensions like 800x600
+  });
+  
+  if (largeImages.length > 0) {
+    return largeImages[0];
+  }
+
+  // Fallback to first image
   return imageUrls[0];
 };
 
@@ -102,13 +134,7 @@ export const isValidImageUrl = (url: string): boolean => {
       return false;
     }
 
-    // Check if it has a valid image extension (optional)
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
-    const hasImageExtension = imageExtensions.some(ext =>
-      urlObj.pathname.toLowerCase().endsWith(ext)
-    );
-
-    // Accept URLs with image extensions or without (CDNs often don't have extensions)
+    // Accept URLs (CDNs often don't have extensions, so we don't check)
     return true;
   } catch (error) {
     return false;

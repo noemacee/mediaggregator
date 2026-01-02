@@ -96,18 +96,102 @@ const storeArticles = async (
 };
 
 /**
+ * Try to find cover image from RSS feed metadata
+ */
+const findCoverFromFeedMetadata = async (feedUrl: string): Promise<string | null> => {
+  try {
+    const feed = await fetchRssFeed(feedUrl);
+    
+    // Check feed image (often the publication cover)
+    if (feed.image?.url) {
+      return feed.image.url;
+    }
+    
+    // Check for itunes:image (some feeds use this)
+    if ((feed as any)['itunes:image']?.[0]?.$.href) {
+      return (feed as any)['itunes:image'][0].$.href;
+    }
+    
+    return null;
+  } catch (error) {
+    logger.debug('Could not extract cover from feed metadata:', error);
+    return null;
+  }
+};
+
+/**
+ * Try common cover image URL patterns for a media source
+ */
+const tryCommonCoverPatterns = async (mediaSource: MediaSource): Promise<string | null> => {
+  if (!mediaSource.website_url) return null;
+  
+  try {
+    const baseUrl = new URL(mediaSource.website_url).origin;
+    const commonPaths = [
+      '/cover.jpg',
+      '/couverture.jpg',
+      '/une.jpg',
+      '/front.jpg',
+      '/magazine-cover.jpg',
+      '/journal-cover.jpg',
+      '/images/cover.jpg',
+      '/images/couverture.jpg',
+      '/images/une.jpg',
+      '/static/cover.jpg',
+      '/assets/cover.jpg'
+    ];
+    
+    // Try a few common patterns (don't check all to avoid too many requests)
+    for (const path of commonPaths.slice(0, 3)) {
+      try {
+        const testUrl = `${baseUrl}${path}`;
+        const response = await fetch(testUrl, { method: 'HEAD', timeout: 2000 });
+        if (response.ok && response.headers.get('content-type')?.startsWith('image/')) {
+          return testUrl;
+        }
+      } catch {
+        // Continue to next pattern
+      }
+    }
+  } catch (error) {
+    // Ignore errors
+  }
+  
+  return null;
+};
+
+/**
  * Create or update publication for today
  */
 const createOrUpdatePublication = async (
   mediaSource: MediaSource,
-  articles: any[]
+  articles: any[],
+  rssFeedUrl: string | null = null
 ): Promise<string | null> => {
   const today = getTodayDate();
 
   try {
-    // Extract all images from articles to find best cover
-    const allImages = extractAllImages(articles);
-    const coverImageUrl = selectBestCoverImage(allImages) || mediaSource.logo_url || mediaSource.cover_image_url;
+    // Priority 1: Try to get cover from RSS feed metadata
+    let coverImageUrl: string | null = null;
+    if (rssFeedUrl) {
+      coverImageUrl = await findCoverFromFeedMetadata(rssFeedUrl);
+    }
+    
+    // Priority 2: Extract all images from articles and find best cover
+    if (!coverImageUrl) {
+      const allImages = extractAllImages(articles);
+      coverImageUrl = selectBestCoverImage(allImages);
+    }
+    
+    // Priority 3: Try common cover URL patterns
+    if (!coverImageUrl) {
+      coverImageUrl = await tryCommonCoverPatterns(mediaSource);
+    }
+    
+    // Priority 4: Fallback to media source defaults
+    if (!coverImageUrl) {
+      coverImageUrl = mediaSource.cover_image_url || mediaSource.logo_url || null;
+    }
 
     // Check if publication exists for today
     const { data: existing } = await supabase
@@ -226,7 +310,7 @@ export const fetchMediaSourceRss = async (
     logger.debug(`Found ${feed.items.length} items in RSS feed`);
 
     // Create or update publication for today
-    const publicationId = await createOrUpdatePublication(mediaSource, feed.items);
+    const publicationId = await createOrUpdatePublication(mediaSource, feed.items, rssFeed.feed_url);
 
     if (!publicationId) {
       throw new Error('Failed to create/update publication');

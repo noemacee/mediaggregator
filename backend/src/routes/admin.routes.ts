@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { triggerFetchNow, getFetchLogs } from '../controllers/admin.controller';
+import { triggerFetchNow, getFetchLogs, scrapeCoverImages } from '../controllers/admin.controller';
 
 const router = Router();
 
@@ -8,5 +8,8 @@ router.post('/fetch-now', triggerFetchNow);
 
 // GET /api/admin/fetch-logs - Get fetch logs
 router.get('/fetch-logs', getFetchLogs);
+
+// POST /api/admin/scrape-covers - Trigger publication cover scraping
+router.post('/scrape-covers', scrapeCoverImages);
 
 export default router;
