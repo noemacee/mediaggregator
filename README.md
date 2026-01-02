@@ -1,4 +1,6 @@
-# Mediaggregator
+# Le Kiosque
+
+https://fabulous-courage-production.up.railway.app/
 
 A media aggregation platform that brings together French news sources and publications in one simple, elegant interface - inspired by [Cafeyn Newsstand](https://www.cafeyn.co/fr/newsstand).
 
