@@ -32,12 +32,12 @@ const SmallArticleCard = ({ article }: SmallArticleCardProps) => {
   return (
     <article
       onClick={handleClick}
-      className="bg-white rounded-lg overflow-hidden cursor-pointer transition-shadow hover:shadow-md border border-gray-200 shadow-sm"
+      className="bg-white rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-[1.02] border border-gray-100 shadow-md h-full flex flex-col"
     >
       <div className="flex gap-3 p-4">
         {/* Small Square Image */}
         {(image_url || media_source?.logo_url) && (
-          <div className="flex-shrink-0 w-28 h-28">
+          <div className="flex-shrink-0 w-20 h-20">
             <ImageWithFallback
               src={image_url}
               fallbackSrc={media_source?.logo_url}
@@ -50,7 +50,7 @@ const SmallArticleCard = ({ article }: SmallArticleCardProps) => {
         {/* Content */}
         <div className="flex-1 min-w-0 flex flex-col">
           {/* Title */}
-          <h3 className="text-sm font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 leading-tight">
+          <h3 className="text-sm font-bold text-amber-950 mb-2 line-clamp-2 hover:bg-gradient-to-r hover:from-amber-700 hover:to-orange-700 hover:bg-clip-text hover:text-transparent leading-tight transition-all">
             {title}
           </h3>
 
@@ -86,10 +86,10 @@ const SmallArticleCard = ({ article }: SmallArticleCardProps) => {
                   e.stopPropagation();
                   toggleSave(article.id);
                 }}
-                className={`transition-colors ${
+                className={`transition-all duration-200 hover:scale-110 ${
                   isSaved(article.id)
-                    ? 'text-blue-600'
-                    : 'text-gray-400 hover:text-blue-600'
+                    ? 'text-amber-700'
+                    : 'text-gray-400 hover:text-amber-700'
                 }`}
                 title={isSaved(article.id) ? 'Retirer des sauvegardes' : 'Sauvegarder'}
               >
@@ -107,7 +107,7 @@ const SmallArticleCard = ({ article }: SmallArticleCardProps) => {
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-gray-400 hover:text-gray-600 transition-all duration-200 hover:scale-110"
                 title="Partager"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

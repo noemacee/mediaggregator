@@ -1,7 +1,12 @@
 import { Link, useLocation } from 'react-router-dom';
 import kiosqueLogo from '../../assets/kiosque-logo.png';
 
-const Sidebar = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const location = useLocation();
 
   const menuItems = [
@@ -53,34 +58,47 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 flex flex-col">
+    <aside className={`fixed left-0 top-0 h-screen w-64 bg-gradient-to-b from-amber-50 via-orange-50 to-amber-50 shadow-2xl flex flex-col z-40 transition-transform duration-300 ease-in-out border-r border-amber-200 ${
+      isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+    }`}>
       {/* Logo/Header */}
-      <div className="p-6 border-b border-gray-200">
-        <Link to="/" className="block w-full">
-          <img 
-            src={kiosqueLogo} 
-            alt="Le Kiosque" 
+      <div className="p-6 border-b border-amber-200 flex items-center justify-between">
+        <Link to="/" className="block flex-1" onClick={onClose}>
+          <img
+            src={kiosqueLogo}
+            alt="Le Kiosque"
             className="w-full h-auto object-contain"
           />
         </Link>
+        {/* Close button - only visible on mobile */}
+        <button
+          onClick={onClose}
+          className="lg:hidden p-2 hover:bg-amber-200 rounded-lg ml-2 text-amber-900 transition-colors"
+          aria-label="Close menu"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 py-6">
-        <ul className="space-y-1 px-3">
+        <ul className="space-y-2 px-3">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
+                  onClick={onClose}
+                  className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
                     isActive
-                      ? 'bg-blue-50 text-blue-600'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg shadow-amber-500/30'
+                      : 'text-amber-900 hover:bg-amber-200/50 hover:text-amber-950'
                   }`}
                 >
-                  <span className={isActive ? 'text-blue-600' : 'text-gray-400'}>
+                  <span className={isActive ? 'text-white' : 'text-amber-700 group-hover:text-amber-950 transition-colors'}>
                     {item.icon}
                   </span>
                   <span className="font-medium">{item.label}</span>
@@ -92,8 +110,8 @@ const Sidebar = () => {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-200">
-        <p className="text-xs text-gray-500 text-center">
+      <div className="p-4 border-t border-amber-200">
+        <p className="text-xs text-amber-700 text-center">
           {new Date().toLocaleDateString('fr-FR', {
             day: 'numeric',
             month: 'long',

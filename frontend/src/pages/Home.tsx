@@ -86,16 +86,10 @@ const Home = () => {
 
   return (
     <MainLayout>
-      <div className="p-8">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-6xl font-bold text-gray-900 mb-3 tracking-tight">Accueil</h1>
-          <p className="text-xl text-gray-600 font-normal leading-relaxed">Vos derniers articles</p>
-        </div>
-
+      <div className="p-4 lg:p-8">
         {/* Featured Articles Section */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Nos derniers articles</h2>
+        <section className="mb-8 lg:mb-12">
+          <h2 className="text-2xl lg:text-3xl font-bold text-amber-950 mb-4 lg:mb-6">Nos derniers articles</h2>
           {articlesLoading ? (
             <LoadingSpinner />
           ) : featuredArticles.length > 0 ? (
@@ -108,7 +102,7 @@ const Home = () => {
         </section>
 
         {/* Category Filter Section */}
-        <section className="mb-12">
+        <section className="mb-8 lg:mb-12">
           <CategoryFilter
             selectedCategories={selectedCategories}
             onToggleCategory={toggleCategorySelection}
@@ -117,9 +111,9 @@ const Home = () => {
         </section>
 
         {/* Media Sources Filter Section */}
-        <section className="mb-12">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">
+        <section className="mb-8 lg:mb-12">
+          <div className="flex items-center justify-between mb-4 lg:mb-6">
+            <h2 className="text-2xl lg:text-3xl font-bold text-amber-950">
               Mes médias
               {selectedCategories.size > 0 && filteredMediaSources.length > 0 && (
                 <span className="ml-2 text-sm font-normal text-gray-500">
@@ -129,15 +123,15 @@ const Home = () => {
             </h2>
           </div>
           {filteredMediaSources.length > 0 ? (
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3 lg:gap-4">
               {filteredMediaSources.map((source) => (
                 <div
                   key={source.id}
                   onClick={() => toggleMediaSelection(source.id)}
-                  className={`flex flex-col items-center p-4 rounded-lg shadow-sm transition-all cursor-pointer ${
+                  className={`flex flex-col items-center p-4 rounded-xl transition-all cursor-pointer w-24 h-32 ${
                     isMediaSelected(source.id)
-                      ? 'bg-blue-50 border-2 border-blue-500 shadow-md'
-                      : 'bg-white hover:shadow-md border-2 border-transparent'
+                      ? 'bg-gray-50 border-2 border-gray-400 shadow-lg'
+                      : 'bg-white hover:shadow-lg border-2 border-transparent hover:border-gray-300'
                   }`}
                 >
                   <div className="w-16 h-16 mb-2 flex items-center justify-center">
@@ -155,8 +149,8 @@ const Home = () => {
                       </div>
                     )}
                   </div>
-                  <span className={`text-xs text-center ${
-                    isMediaSelected(source.id) ? 'text-blue-700 font-semibold' : 'text-gray-600'
+                  <span className={`text-xs text-center line-clamp-2 ${
+                    isMediaSelected(source.id) ? 'text-gray-900 font-semibold' : 'text-gray-700'
                   }`}>
                     {source.name}
                   </span>
@@ -176,7 +170,7 @@ const Home = () => {
             <div className="mt-4">
               <button
                 onClick={() => setSelectedMediaIds(new Set())}
-                className="text-sm text-blue-600 hover:text-blue-700 underline"
+                className="text-sm font-medium text-gray-600 hover:text-gray-800 underline underline-offset-2 transition-colors"
               >
                 Effacer la sélection ({selectedMediaIds.size})
               </button>
@@ -186,7 +180,7 @@ const Home = () => {
 
         {/* All Articles Grid Section */}
         <section>
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl lg:text-3xl font-bold text-amber-950 mb-4 lg:mb-6">
             {selectedMediaIds.size > 0
               ? `Articles (${remainingArticles.length})`
               : 'Tous les articles'}
@@ -201,10 +195,10 @@ const Home = () => {
                 ))}
               </div>
               {articlesToShow < remainingArticles.length && (
-                <div className="text-center mt-8">
+                <div className="text-center mt-8 lg:mt-12">
                   <button
                     onClick={() => setArticlesToShow(prev => prev + 20)}
-                    className="text-sm text-gray-600 hover:text-gray-900 underline transition-colors"
+                    className="text-sm text-gray-500 hover:text-gray-700 underline underline-offset-2 transition-colors"
                   >
                     Voir plus
                   </button>

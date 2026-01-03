@@ -39,14 +39,14 @@ const FeaturedArticlesLayout = ({ articles }: FeaturedArticlesLayoutProps) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
       {/* Main Featured Article - Left Side (2 columns) */}
-      <div className="lg:col-span-2">
+      <div className="lg:col-span-2 h-full">
         <article
           onClick={handleMainArticleClick}
-          className="bg-white rounded-lg overflow-hidden cursor-pointer transition-shadow hover:shadow-lg border border-gray-200 shadow-sm h-full flex flex-col"
+          className="bg-white rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-2xl hover:scale-[1.01] border border-gray-100 shadow-lg h-full flex flex-col"
         >
           {/* Large Image */}
           {(mainArticle.image_url || mainArticle.media_source?.logo_url) && (
-            <div className="w-full h-72 flex-shrink-0">
+            <div className="w-full h-48 flex-shrink-0 overflow-hidden">
               <ImageWithFallback
                 src={mainArticle.image_url}
                 fallbackSrc={mainArticle.media_source?.logo_url}
@@ -59,7 +59,7 @@ const FeaturedArticlesLayout = ({ articles }: FeaturedArticlesLayoutProps) => {
           {/* Content Section */}
           <div className="p-6 flex-1 flex flex-col">
             {/* Title */}
-            <h2 className="text-xl font-bold text-gray-900 mb-3 hover:text-blue-600 line-clamp-2">
+            <h2 className="text-xl lg:text-2xl font-bold text-amber-950 mb-3 hover:bg-gradient-to-r hover:from-amber-700 hover:to-orange-700 hover:bg-clip-text hover:text-transparent line-clamp-2 transition-all">
               {mainArticle.title}
             </h2>
 
@@ -95,10 +95,10 @@ const FeaturedArticlesLayout = ({ articles }: FeaturedArticlesLayoutProps) => {
                     e.stopPropagation();
                     toggleSave(mainArticle.id);
                   }}
-                  className={`transition-colors ${
+                  className={`transition-all duration-200 hover:scale-110 ${
                     isSaved(mainArticle.id)
-                      ? 'text-blue-600'
-                      : 'text-gray-400 hover:text-blue-600'
+                      ? 'text-amber-700'
+                      : 'text-gray-400 hover:text-amber-700'
                   }`}
                   title={isSaved(mainArticle.id) ? 'Retirer des sauvegardes' : 'Sauvegarder'}
                 >
@@ -116,7 +116,7 @@ const FeaturedArticlesLayout = ({ articles }: FeaturedArticlesLayoutProps) => {
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
+                  className="text-gray-400 hover:text-gray-600 transition-all duration-200 hover:scale-110"
                   title="Partager"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -130,9 +130,11 @@ const FeaturedArticlesLayout = ({ articles }: FeaturedArticlesLayoutProps) => {
       </div>
 
       {/* Side Articles - Right Side (1 column) */}
-      <div className="lg:col-span-1 flex flex-col gap-3">
+      <div className="lg:col-span-1 h-full flex flex-col gap-3">
         {sideArticles.map((article) => (
-          <SmallArticleCard key={article.id} article={article} />
+          <div key={article.id} className="flex-1 min-h-0">
+            <SmallArticleCard article={article} />
+          </div>
         ))}
       </div>
     </div>

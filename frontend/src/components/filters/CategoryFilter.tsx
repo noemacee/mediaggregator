@@ -20,28 +20,28 @@ const CategoryFilter = ({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">Catégories</h2>
+        <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">Catégories</h2>
         {selectedCategories.size > 0 && (
           <button
             onClick={onClearCategories}
-            className="text-sm text-blue-600 hover:text-blue-700 underline"
+            className="text-sm font-medium text-gray-600 hover:text-gray-800 underline underline-offset-2 transition-colors"
           >
             Tout effacer ({selectedCategories.size})
           </button>
         )}
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 lg:gap-3">
         {categories.map((category) => {
           const isSelected = selectedCategories.has(category.id);
           return (
             <button
               key={category.id}
               onClick={() => onToggleCategory(category.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 ${
                 isSelected
-                  ? 'bg-blue-600 text-white shadow-md hover:bg-blue-700'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:border-blue-500 hover:text-blue-600'
+                  ? 'bg-gray-800 text-white shadow-lg hover:shadow-xl'
+                  : 'bg-white text-gray-700 border-2 border-gray-300 hover:border-gray-400 hover:text-gray-900 hover:shadow-md'
               }`}
             >
               {category.label}

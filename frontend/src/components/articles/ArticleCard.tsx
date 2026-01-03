@@ -32,7 +32,7 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
   return (
     <article
       onClick={handleClick}
-      className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-md"
+      className="bg-white rounded-2xl shadow-md hover:shadow-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.02] border border-gray-100"
     >
       <div className="flex gap-4 p-4">
         {/* Image - Left side */}
@@ -69,7 +69,7 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
           </div>
 
           {/* Title */}
-          <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-2 hover:text-blue-600 leading-tight">
+          <h3 className="text-base font-bold text-amber-950 mb-2 line-clamp-2 hover:bg-gradient-to-r hover:from-amber-700 hover:to-orange-700 hover:bg-clip-text hover:text-transparent leading-tight transition-all">
             {title}
           </h3>
 
@@ -87,10 +87,10 @@ const ArticleCard = ({ article }: ArticleCardProps) => {
                 e.stopPropagation();
                 toggleSave(article.id);
               }}
-              className={`text-sm flex items-center space-x-1 transition-colors ${
+              className={`text-sm flex items-center space-x-1 transition-all ${
                 isSaved(article.id)
-                  ? 'text-blue-600 hover:text-blue-700'
-                  : 'text-gray-600 hover:text-blue-600'
+                  ? 'text-amber-700 hover:text-amber-900 hover:scale-105'
+                  : 'text-gray-500 hover:text-amber-700 hover:scale-105'
               }`}
               title={isSaved(article.id) ? 'Retirer des sauvegardes' : 'Sauvegarder'}
             >
